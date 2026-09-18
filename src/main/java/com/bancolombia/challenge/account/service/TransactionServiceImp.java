@@ -11,6 +11,7 @@ import com.bancolombia.challenge.account.exception.InsufficientBalanceException;
 import com.bancolombia.challenge.account.repository.AccountRepository;
 import com.bancolombia.challenge.account.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class TransactionServiceImp implements ITransactionService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "accounts", key = "#request.accountNumber()")
     public TransactionResponseDTO processTransaction(TransactionRequestDTO request) {
         Account account = accountRepo.findByAccountNumber(request.accountNumber())
                 .orElseThrow(() -> new AccountNotFoundException("Account not found" + request.accountNumber()));
