@@ -8,6 +8,7 @@ import com.bancolombia.challenge.account.exception.AccountAlreadyExistsException
 import com.bancolombia.challenge.account.exception.AccountNotFoundException;
 import com.bancolombia.challenge.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "accounts", key = "#accountNumber")
     public AccountResponseDTO getAccountByNumber(String accountNumber) {
         Account account = accountRepo.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("account " + accountNumber + "does not exist"));
