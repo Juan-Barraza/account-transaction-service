@@ -1,5 +1,6 @@
 package com.bancolombia.challenge.account.dto;
 
+import com.bancolombia.challenge.account.enums.PaymentProvider;
 import com.bancolombia.challenge.account.enums.TransactionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,12 @@ public record TransactionRequestDTO(
         @NotNull(message = "Amount can not be null")
         @PositiveOrZero(message = "Amount must be greater than zero")
         BigDecimal amount,
+
+        @NotBlank(message = "Channel must not be empty")
+        String channel,
+
+        @NotNull(message = "Pyment Provider is required")
+        PaymentProvider paymentProvider,
 
         String description
 ) {
