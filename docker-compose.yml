@@ -46,6 +46,8 @@ services:
      POSTGRES_DB: ${POSTGRES_DB}
      POSTGRES_USER: ${POSTGRES_USER}
      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+     TELEMETRY_GRPC_HOST: ${TELEMETRY_GRPC_HOST}
+     TELEMETRY_GRPC_PORT: ${TELEMETRY_GRPC_PORT}
    depends_on:
      postgres:
        condition: service_healthy
