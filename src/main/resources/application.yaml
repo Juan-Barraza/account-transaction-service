@@ -25,10 +25,16 @@ spring:
   cache:
     type: redis
 
-springdoc:
+spring doc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
     operation-sorter: alpha
     tags-sorter: alpha
+
+grpc:
+  client:
+    telemetry-service:
+      address: 'static://${TELEMETRY_GRPC_HOST:localhost}:${TELEMETRY_GRPC_PORT:9090}'
+      negotiation-type: plaintext
