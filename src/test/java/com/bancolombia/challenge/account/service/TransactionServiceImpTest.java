@@ -151,18 +151,12 @@ public class TransactionServiceImpTest {
                 "Retiro excedido"
         );
 
-        TransactionGrpcResponse mockGrpcResponse = TransactionGrpcResponse.newBuilder()
-                .setCalculatedFee(0.0)
-                .setIsHighRisk(false)
-                .build();
-
         when(accountRepo.findByAccountNumber("2646610163")).thenReturn(Optional.of(account));
-        when(telemetryGrpcClient.evaluateRiskAndCalculateFee(anyString(), anyString(), anyDouble(), anyString(), anyString()))
-                .thenReturn(mockGrpcResponse);
 
         assertThatThrownBy(() -> transactionService.processTransaction(request))
                 .isInstanceOf(InsufficientBalanceException.class);
 
+        verify(telemetryGrpcClient, never()).evaluateRiskAndCalculateFee(any(), any(), anyDouble(), any(), any());
         verify(transactionRepo, never()).save(any());
     }
 
