@@ -61,6 +61,25 @@ pipeline {
             }
         }
 
+        stage('Deploy') {
+            steps {
+                sh '''
+                    CMD_ID=$(aws ssm send-command \
+                    --instance-ids $ACCOUNT_INSTANCE_ID \
+                    --document-name AWS-RunShellScript \
+                    --parameters "commands=[\\"/opt/app/deploy.sh ${FULL_IMAGE}:${IMAGE_TAG} account ${ACCOUNT_PORTS}\\"]" \
+                    --query Command.CommandId --output text)
+
+                    aws ssm wait command-executed \
+                    --command-id $CMD_ID --instance-id $ACCOUNT_INSTANCE_ID
+
+                    aws ssm get-command-invocation \
+                    --command-id $CMD_ID --instance-id $ACCOUNT_INSTANCE_ID \
+                    --query StandardOutputContent --output text
+                '''
+            }
+        }
+
     }
 
     parameters {
